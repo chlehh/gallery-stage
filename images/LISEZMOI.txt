@@ -1,0 +1,7 @@
+Déposez vos images ici (jpg, png, webp...).
+
+Puis listez-les dans index.html, dans la section GALLERY :
+
+    { src: "images/le-nom-du-fichier.jpg", title: "Votre titre" },
+
+Vous pouvez supprimer ce fichier LISEZMOI.txt.

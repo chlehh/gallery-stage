@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mon stage à La Poste</title>
+<meta name="description" content="Galerie d'images réalisées pendant mon stage.">
+<style>
+  /* ============================================================
+     THÈME — noir & jaune (modifiable)
+     ============================================================ */
+  :root{
+    --bg:#0A0A0B;          /* fond */
+    --panel:#111113;       /* cartes / panneaux */
+    --panel-2:#161618;
+    --line:#222226;        /* traits */
+    --line-2:#2c2c31;
+    --ink:#F4F3EF;         /* texte clair */
+    --ink-soft:#8C8C84;    /* texte secondaire */
+    --yellow:#FFCD00;      /* jaune La Poste */
+    --yellow-dim:#C9A300;
+    --radius:14px;
+    --maxw:1120px;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; color:var(--ink); background:var(--bg);
+    background-image:
+      radial-gradient(900px 520px at 82% -12%, rgba(255,205,0,.10), transparent 62%),
+      radial-gradient(700px 420px at 10% 8%, rgba(255,205,0,.04), transparent 60%);
+    background-attachment:fixed;
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.5; -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  }
+  /* trame de perforations (timbre) en fond */
+  body::before{
+    content:""; position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:radial-gradient(rgba(255,255,255,.045) 1px, transparent 1.4px);
+    background-size:22px 22px;
+    -webkit-mask-image:linear-gradient(to bottom, #000 0%, transparent 70%);
+            mask-image:linear-gradient(to bottom, #000 0%, transparent 70%);
+  }
+  .mono{ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace; }
+  .wrap{ max-width:var(--maxw); margin:0 auto; padding:0 20px; position:relative; z-index:1; }
+
+  /* ---------- Barre du haut ---------- */
+  .topbar{ display:flex; align-items:center; justify-content:space-between; padding:18px 0 0; }
+  .brand{ display:flex; align-items:center; gap:10px; font-size:.74rem; letter-spacing:.22em; text-transform:uppercase; color:var(--ink-soft); }
+  .brand .chip{ width:12px; height:12px; background:var(--yellow); border-radius:3px; box-shadow:0 0 16px rgba(255,205,0,.5); }
+  .share-btn{
+    display:inline-flex; align-items:center; gap:8px; cursor:pointer; font:inherit;
+    font-size:.82rem; font-weight:600; color:var(--yellow);
+    background:rgba(255,205,0,.07); border:1px solid rgba(255,205,0,.35);
+    padding:9px 14px; border-radius:999px; white-space:nowrap;
+    transition:background .18s ease, transform .12s ease, box-shadow .18s ease;
+  }
+  .share-btn:hover{ background:rgba(255,205,0,.16); box-shadow:0 0 22px rgba(255,205,0,.18); }
+  .share-btn:active{ transform:scale(.97); }
+  .share-btn:focus-visible{ outline:2px solid var(--yellow); outline-offset:3px; }
+  .share-btn svg{ width:16px; height:16px; }
+
+  /* ---------- Hero ---------- */
+  .hero{ padding:30px 0 4px; }
+  .hero-inner{ display:flex; align-items:center; justify-content:space-between; gap:26px; flex-wrap:wrap; }
+  .hero-text{ flex:1 1 320px; min-width:0; }
+  .eyebrow{ display:inline-flex; align-items:center; gap:10px; font-size:.72rem; letter-spacing:.26em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 14px; }
+  .eyebrow::before{ content:""; width:26px; height:2px; background:var(--yellow); display:inline-block; }
+  h1{
+    margin:0; font-weight:800; text-transform:uppercase; letter-spacing:-.022em; line-height:.96;
+    font-size:clamp(2.2rem, 7.5vw, 4.2rem);
+  }
+  h1 .y{ color:var(--yellow); }
+  .subtitle{ margin:16px 0 0; color:var(--ink-soft); font-size:1rem; max-width:46ch; }
+
+  .stamp-wrap{ flex:0 0 auto; margin-left:auto; }
+  .stamp{ width:clamp(104px, 15vw, 152px); height:auto; display:block; animation:spin 60s linear infinite; filter:drop-shadow(0 0 18px rgba(255,205,0,.18)); }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .st-arc{ fill:var(--yellow); font-family:ui-monospace,monospace; font-size:13px; letter-spacing:2px; }
+  .st-c{ fill:var(--ink); font-weight:800; font-size:20px; letter-spacing:1px; }
+  .st-s{ fill:#bdbdb5; font-family:ui-monospace,monospace; font-size:9px; letter-spacing:3px; }
+
+  /* ---------- Bandeau défilant ---------- */
+  .ticker{ margin:30px 0 34px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); overflow:hidden; }
+  .ticker-track{ display:inline-flex; white-space:nowrap; animation:marq 30s linear infinite; will-change:transform; }
+  .ticker:hover .ticker-track{ animation-play-state:paused; }
+  .ticker-seq{ display:inline-flex; align-items:center; }
+  .ticker-seq span{ font-family:ui-monospace,monospace; font-size:.72rem; letter-spacing:.24em; text-transform:uppercase; color:var(--ink-soft); padding:11px 0; }
+  .ticker-seq .d{ color:var(--yellow); padding:0 20px; }
+  @keyframes marq{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+
+  /* ---------- Grille ---------- */
+  .grid{ display:grid; grid-template-columns:1fr; gap:18px; }
+  @media (min-width:560px){ .grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (min-width:920px){ .grid{ grid-template-columns:repeat(3,1fr); } }
+
+  .card{
+    position:relative; display:block; text-align:left; width:100%; padding:0; cursor:pointer; font:inherit;
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden;
+    opacity:0; transform:translateY(20px);
+    transition:opacity .6s ease, transform .6s cubic-bezier(.2,.7,.2,1), border-color .25s ease, box-shadow .25s ease;
+    transition-delay:var(--d, 0ms);
+  }
+  .card.in{ opacity:1; transform:translateY(0); }
+  .card.in:hover{ transform:translateY(-5px); border-color:var(--line-2); box-shadow:0 18px 40px rgba(0,0,0,.5); }
+  .card:focus-visible{ outline:3px solid var(--yellow); outline-offset:2px; }
+  .card .bar{ position:absolute; top:0; left:0; height:3px; width:0; background:var(--yellow); z-index:3; transition:width .45s cubic-bezier(.2,.7,.2,1); box-shadow:0 0 14px rgba(255,205,0,.6); }
+  .card.in:hover .bar{ width:100%; }
+
+  .frame{ position:relative; overflow:hidden; }
+  .frame img{ width:100%; aspect-ratio:4/3; object-fit:cover; display:block; background:#1a1a1c; transition:transform .55s cubic-bezier(.2,.7,.2,1); }
+  .card.in:hover .frame img{ transform:scale(1.07); }
+  .frame .hint{
+    position:absolute; right:10px; bottom:10px; display:inline-flex; align-items:center; gap:5px;
+    background:rgba(0,0,0,.55); color:var(--yellow); font-family:ui-monospace,monospace; font-size:.62rem; letter-spacing:.08em;
+    padding:5px 9px; border-radius:999px; opacity:0; transform:translateY(6px); transition:opacity .3s ease, transform .3s ease;
+    -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px);
+  }
+  .card.in:hover .frame .hint{ opacity:1; transform:none; }
+
+  .cap{ display:flex; align-items:baseline; gap:11px; padding:13px 15px 15px; }
+  .num{ font-family:ui-monospace,monospace; color:var(--yellow); font-size:.7rem; letter-spacing:.08em; flex:0 0 auto; }
+  .cap h2{ margin:0; font-size:1.02rem; font-weight:600; line-height:1.3; color:var(--ink); }
+
+  .empty{ grid-column:1/-1; border:1px dashed var(--line-2); border-radius:var(--radius); padding:30px 24px; color:var(--ink-soft); background:var(--panel); }
+  .empty code{ background:#000; padding:2px 7px; border-radius:6px; color:var(--yellow); font-size:.85em; }
+
+  /* ---------- Pied de page ---------- */
+  footer{ margin:48px 0 34px; color:var(--ink-soft); font-size:.76rem; }
+  .foot-line{ height:1px; background:var(--line); margin-bottom:16px; }
+
+  /* ---------- Overlays ---------- */
+  .overlay{
+    position:fixed; inset:0; z-index:60; display:flex; align-items:center; justify-content:center; padding:22px;
+    background:rgba(5,5,7,.82); -webkit-backdrop-filter:blur(9px); backdrop-filter:blur(9px);
+    opacity:0; visibility:hidden; transition:opacity .25s ease, visibility .25s ease;
+  }
+  .overlay.open{ opacity:1; visibility:visible; }
+  .ov-close{ position:absolute; top:16px; right:16px; z-index:2; width:44px; height:44px; border-radius:999px; border:1px solid var(--line-2); cursor:pointer; background:rgba(255,255,255,.06); color:var(--ink); font-size:22px; display:flex; align-items:center; justify-content:center; }
+  .ov-close:hover{ background:rgba(255,205,0,.16); color:var(--yellow); border-color:rgba(255,205,0,.4); }
+  .ov-close:focus-visible{ outline:2px solid var(--yellow); outline-offset:2px; }
+
+  .lb-fig{ margin:0; text-align:center; transform:scale(.96); transition:transform .28s cubic-bezier(.2,.7,.2,1); }
+  .overlay.open .lb-fig{ transform:scale(1); }
+  .lb-fig img{ max-width:92vw; max-height:78vh; object-fit:contain; border-radius:10px; box-shadow:0 30px 80px rgba(0,0,0,.6); }
+  .lb-cap{ margin-top:16px; color:var(--ink); font-size:.95rem; display:inline-flex; gap:10px; align-items:baseline; }
+  .lb-cap .num{ font-size:.74rem; }
+  .nav-arrow{ position:absolute; top:50%; transform:translateY(-50%); width:48px; height:48px; border-radius:999px; border:1px solid var(--line-2); cursor:pointer; background:rgba(255,255,255,.06); color:var(--ink); font-size:24px; display:flex; align-items:center; justify-content:center; }
+  .nav-arrow:hover{ background:rgba(255,205,0,.16); color:var(--yellow); border-color:rgba(255,205,0,.4); }
+  .nav-arrow:focus-visible{ outline:2px solid var(--yellow); outline-offset:2px; }
+  .nav-prev{ left:16px; } .nav-next{ right:16px; }
+  @media (max-width:560px){ .nav-arrow{ width:42px; height:42px; top:auto; bottom:20px; transform:none; } .nav-prev{ left:20px; } .nav-next{ right:20px; } }
+
+  .qr-panel{ background:var(--panel); border:1px solid var(--line-2); border-radius:18px; padding:26px 24px 24px; width:min(340px,90vw); text-align:center; transform:scale(.96); transition:transform .28s cubic-bezier(.2,.7,.2,1); }
+  .overlay.open .qr-panel{ transform:scale(1); }
+  .qr-panel h3{ margin:0 0 4px; font-size:1.12rem; }
+  .qr-panel p{ margin:0 0 18px; color:var(--ink-soft); font-size:.84rem; }
+  #qrbox{ display:flex; justify-content:center; align-items:center; min-height:200px; background:#fff; padding:14px; border-radius:12px; }
+  #qrbox img, #qrbox canvas{ display:block; }
+  .qr-url{ margin:16px 0 14px; font-size:.76rem; word-break:break-all; color:var(--ink-soft); }
+  .qr-copy{ display:inline-flex; align-items:center; gap:7px; background:var(--yellow); color:#0A0A0B; border:0; cursor:pointer; font:inherit; font-weight:700; font-size:.9rem; padding:11px 18px; border-radius:999px; }
+  .qr-copy:active{ transform:scale(.97); }
+  .qr-copy:focus-visible{ outline:2px solid var(--ink); outline-offset:2px; }
+
+  @media (prefers-reduced-motion:reduce){
+    *{ animation:none !important; }
+    .ticker-track,.stamp{ animation:none !important; }
+    .card{ opacity:1 !important; transform:none !important; transition:border-color .2s, box-shadow .2s !important; }
+    .frame img{ transition:none !important; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand"><span class="chip"></span><span class="mono">La Poste</span></div>
+      <button class="share-btn" id="shareBtn" aria-label="Afficher le QR code pour partager">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 3h7v7H3V3zm2 2v3h3V5H5zm9-2h7v7h-7V3zm2 2v3h3V5h-3zM3 14h7v7H3v-7zm2 2v3h3v-3H5zm9-2h3v3h-3v-3zm4 0h3v3h-3v-3zm-4 4h3v3h-3v-3zm4 0h3v3h-3v-3z"/></svg>
+        Partager
+      </button>
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="wrap hero-inner">
+      <div class="hero-text">
+        <p class="eyebrow" id="eyebrow">Galerie</p>
+        <h1 id="title">Mon stage à La Poste</h1>
+        <p class="subtitle" id="subtitle">Service informatique</p>
+      </div>
+      <div class="stamp-wrap">
+        <svg class="stamp" viewBox="0 0 200 200" role="img" aria-label="Cachet : Groupe La Poste — Galerie — Stage 2026">
+          <defs><path id="st-top" d="M30,100 a70,70 0 0 1 140,0"/></defs>
+          <circle cx="100" cy="100" r="92" fill="none" stroke="var(--yellow)" stroke-width="2"/>
+          <circle cx="100" cy="100" r="78" fill="none" stroke="var(--yellow)" stroke-width="1" opacity=".55"/>
+          <text class="st-arc"><textPath href="#st-top" startOffset="50%" text-anchor="middle">GROUPE · LA POSTE</textPath></text>
+          <text class="st-c" x="100" y="96" text-anchor="middle">GALERIE</text>
+          <line x1="64" y1="106" x2="136" y2="106" stroke="var(--yellow)" stroke-width="1"/>
+          <text class="st-s" x="100" y="124" text-anchor="middle">STAGE · 6</text>
+        </svg>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="ticker"><div class="ticker-track" id="ticker"></div></div>
+    <main><div class="grid" id="grid"></div></main>
+    <footer>
+      <div class="foot-line"></div>
+      <p class="mono" id="footer">La Poste · Stage 2026 — projet personnel</p>
+    </footer>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="overlay" id="lightbox" role="dialog" aria-modal="true" aria-label="Image en grand">
+    <button class="ov-close" id="lbClose" aria-label="Fermer">&times;</button>
+    <button class="nav-arrow nav-prev" id="lbPrev" aria-label="Image précédente">&#8249;</button>
+    <figure class="lb-fig">
+      <img id="lbImg" alt="">
+      <figcaption class="lb-cap"><span class="num mono" id="lbNum"></span><span id="lbCap"></span></figcaption>
+    </figure>
+    <button class="nav-arrow nav-next" id="lbNext" aria-label="Image suivante">&#8250;</button>
+  </div>
+
+  <!-- QR -->
+  <div class="overlay" id="qr" role="dialog" aria-modal="true" aria-label="Partager le lien">
+    <button class="ov-close" id="qrClose" aria-label="Fermer">&times;</button>
+    <div class="qr-panel">
+      <h3>Scanner pour ouvrir</h3>
+      <p>Pointez l'appareil photo vers le code.</p>
+      <div id="qrbox"></div>
+      <div class="qr-url mono" id="qrUrl"></div>
+      <button class="qr-copy" id="qrCopy">Copier le lien</button>
+    </div>
+  </div>
+
+<script>
+/* ============================================================================
+   1) RÉGLAGES — modifiez ces quelques lignes
+   ============================================================================ */
+const CONFIG = {
+  eyebrow:  "Galerie",
+  title:    "Mon stage à La Poste",
+  subtitle: "Service informatique",
+  footer:   "La Poste · Stage 2026 — projet personnel"
+};
+
+/* ============================================================================
+   2) VOS IMAGES — une ligne par image
+   ----------------------------------------------------------------------------
+   • Déposez vos photos dans le dossier  images/
+   • Puis remplacez les 3 exemples ci-dessous :
+        { src: "images/ma-photo.jpg", title: "Mon titre" },
+   ============================================================================ */
+const GALLERY = [
+     { src: "images/1.jpeg", title: "Baie informatique regroupant les équipements de vidéosurveillance PMF" },
+     { src: "images/2.jpeg", title: "Vue d’ensemble de la machine à colis et du chantier d’excellence" },
+     { src: "images/3.jpeg", title: "Infrastructure réseau composée de commutateurs Allied Telesis SwitchBlade X8112" },
+     { src: "images/4.jpeg", title: "Centrale UTL de contrôle d’accès avec passerelle 4G" },
+     { src: "images/5.jpeg", title: "Commutateurs réseau et enregistreurs vidéo du site d’Erstein" },
+     { src: "images/6.jpeg", title: "Centrale UTL de contrôle d’accès du site d’Erstein" },
+
+   ];
+
+/* --- générateur d'exemples (à supprimer quand vos vraies images sont en place) --- */
+function ph(label){
+  const svg =
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+       <rect width="800" height="600" fill="#141416"/>
+       <rect width="800" height="6" fill="#FFCD00"/>
+       <rect x="26" y="30" width="748" height="546" fill="none" stroke="#FFCD00" stroke-opacity="0.18" stroke-dasharray="8 8"/>
+       <text x="50" y="92" fill="#8C8C84" font-family="monospace" font-size="22" letter-spacing="4">EXEMPLE</text>
+       <text x="400" y="312" fill="#F4F3EF" font-family="sans-serif" font-size="46" font-weight="700" text-anchor="middle">${label}</text>
+       <text x="400" y="362" fill="#8C8C84" font-family="sans-serif" font-size="20" text-anchor="middle">Remplacez par votre image</text>
+     </svg>`;
+  return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+}
+
+/* ============================================================================
+   3) Mécanique — pas besoin d'y toucher
+   ============================================================================ */
+const pad = n => String(n).padStart(2,"0");
+const esc = s => s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+document.getElementById("eyebrow").textContent  = CONFIG.eyebrow;
+document.getElementById("title").textContent    = CONFIG.title;
+document.getElementById("subtitle").textContent = CONFIG.subtitle;
+document.getElementById("footer").textContent   = CONFIG.footer;
+document.title = CONFIG.title;
+
+/* Bandeau défilant */
+(function(){
+  const parts = [CONFIG.eyebrow, "Stage La Poste", GALLERY.length + " images", "2026", CONFIG.subtitle];
+  const seq = document.createElement("span");
+  seq.className = "ticker-seq";
+  seq.innerHTML = parts.map(p => `<span>${esc(p)}</span>`).join('<span class="d">●</span>') + '<span class="d">●</span>';
+  const track = document.getElementById("ticker");
+  track.appendChild(seq); track.appendChild(seq.cloneNode(true));
+})();
+
+/* Grille + apparition au scroll */
+const grid = document.getElementById("grid");
+if (!GALLERY.length){
+  grid.innerHTML = `<div class="empty">Aucune image pour le moment. Ajoutez vos fichiers dans le dossier <code>images/</code> puis listez-les dans <code>index.html</code>.</div>`;
+} else {
+  const io = ("IntersectionObserver" in window) ? new IntersectionObserver((entries,obs)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); obs.unobserve(e.target); } });
+  }, { threshold:.12, rootMargin:"0px 0px -40px 0px" }) : null;
+
+  GALLERY.forEach((item, i) => {
+    const card = document.createElement("button");
+    card.className = "card";
+    card.style.setProperty("--d", (i % 6) * 70 + "ms");
+    card.setAttribute("aria-label", "Ouvrir : " + item.title);
+    card.innerHTML =
+      `<span class="bar"></span>
+       <div class="frame">
+         <img src="${item.src}" alt="${item.title.replace(/"/g,'&quot;')}" loading="lazy" decoding="async">
+         <span class="hint mono">⤢ Agrandir</span>
+       </div>
+       <div class="cap"><span class="num">N°${pad(i+1)}</span><h2>${esc(item.title)}</h2></div>`;
+    card.addEventListener("click", () => openLightbox(i));
+    grid.appendChild(card);
+    if (io) io.observe(card); else card.classList.add("in");
+  });
+}
+
+/* Lightbox */
+const lb = document.getElementById("lightbox");
+const lbImg = document.getElementById("lbImg");
+const lbCap = document.getElementById("lbCap");
+const lbNum = document.getElementById("lbNum");
+let current = 0, lastFocus = null;
+
+function openLightbox(i){ current=i; lastFocus=document.activeElement; render(); lb.classList.add("open"); document.body.style.overflow="hidden"; document.getElementById("lbClose").focus(); }
+function render(){ const it=GALLERY[current]; lbImg.src=it.src; lbImg.alt=it.title; lbCap.textContent=it.title; lbNum.textContent="N°"+pad(current+1); }
+function move(d){ current=(current+d+GALLERY.length)%GALLERY.length; render(); }
+function closeLightbox(){ lb.classList.remove("open"); document.body.style.overflow=""; if(lastFocus) lastFocus.focus(); }
+
+document.getElementById("lbClose").addEventListener("click", closeLightbox);
+document.getElementById("lbPrev").addEventListener("click", () => move(-1));
+document.getElementById("lbNext").addEventListener("click", () => move(1));
+lb.addEventListener("click", e => { if(e.target===lb) closeLightbox(); });
+
+/* QR */
+const qr = document.getElementById("qr");
+const qrUrl = document.getElementById("qrUrl");
+let qrDone = false;
+const pageUrl = location.origin + location.pathname;
+
+function openQR(){ qr.classList.add("open"); document.body.style.overflow="hidden"; qrUrl.textContent=pageUrl; document.getElementById("qrClose").focus(); if(!qrDone) buildQR(); }
+function closeQR(){ qr.classList.remove("open"); document.body.style.overflow=""; }
+function buildQR(){
+  const box=document.getElementById("qrbox");
+  const make=()=>{ try{ box.innerHTML=""; new QRCode(box,{text:pageUrl,width:200,height:200,colorDark:"#0A0A0B",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.M}); qrDone=true; }catch(e){ fb(); } };
+  if(window.QRCode){ make(); return; }
+  const s=document.createElement("script");
+  s.src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
+  s.onload=make; s.onerror=fb; document.head.appendChild(s);
+}
+function fb(){ document.getElementById("qrbox").innerHTML='<span style="color:#0A0A0B;font-size:.82rem">QR indisponible — utilisez le lien ci-dessous.</span>'; }
+
+document.getElementById("shareBtn").addEventListener("click", openQR);
+document.getElementById("qrClose").addEventListener("click", closeQR);
+qr.addEventListener("click", e => { if(e.target===qr) closeQR(); });
+document.getElementById("qrCopy").addEventListener("click", async () => {
+  const btn=document.getElementById("qrCopy");
+  try{ await navigator.clipboard.writeText(pageUrl); btn.textContent="Lien copié ✓"; }
+  catch(e){ btn.textContent=pageUrl; }
+  setTimeout(()=>{ btn.textContent="Copier le lien"; }, 1800);
+});
+
+/* Clavier */
+document.addEventListener("keydown", e => {
+  if(lb.classList.contains("open")){
+    if(e.key==="Escape") closeLightbox();
+    else if(e.key==="ArrowLeft") move(-1);
+    else if(e.key==="ArrowRight") move(1);
+  } else if(qr.classList.contains("open")){
+    if(e.key==="Escape") closeQR();
+  }
+});
+</script>
+</body>
+</html>
